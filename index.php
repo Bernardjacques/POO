@@ -19,32 +19,32 @@ catch(Exception $e)
 
 if(isset($_POST['se_connecter'])) 
 {
-  if(!empty($_POST['pseudo']) AND !empty($_POST['mot_de_passe'])) 
+  if(!empty($_POST['login']) AND !empty($_POST['password'])) 
   {
-  $_POST['pseudo'] = filter_var($_POST['pseudo'],FILTER_SANITIZE_STRING);
-  $_POST['mot_de_passe'] = filter_var($_POST['mot_de_passe'],FILTER_SANITIZE_STRING);
+  $_POST['login'] = filter_var($_POST['login'],FILTER_SANITIZE_STRING);
+  $_POST['password'] = filter_var($_POST['password'],FILTER_SANITIZE_STRING);
 
-  $pseudo = htmlspecialchars($_POST['pseudo']);
-  $mot_de_passe = sha1($_POST['mot_de_passe']);
+  $login = htmlspecialchars($_POST['login']);
+  $password = sha1($_POST['password']);
   
 
     
-  $requtil = $bdd->prepare('SELECT * FROM utilisateur WHERE pseudo = ? AND mot_de_passe = ?');
-  $requtil->execute(array($pseudo, $mot_de_passe));
+  $requtil = $bdd->prepare('SELECT * FROM user WHERE login = ? AND password = ?');
+  $requtil->execute(array($login, $password));
 
     $utilinfo = $requtil->fetchAll(PDO::FETCH_ASSOC);
     if(count($utilinfo) == 1) 
     {
           $_SESSION['id'] = $utilinfo[0]['id'];
-          $_SESSION['pseudo'] = $utilinfo[0]['pseudo'];
-          $_SESSION['mot_de_passe'] = $utilinfo[0]['mot_de_passe'];
+          $_SESSION['login'] = $utilinfo[0]['login'];
+          $_SESSION['password'] = $utilinfo[0]['password'];
           //header("Location: /php-chat-db/chatroom.php/");
     }
     else 
     {
       $Error="vous n'êtes pas inscrit";
         echo($Error);
-        echo($mot_de_passe);
+        echo($password);
     } 
   }  
 }
@@ -65,15 +65,15 @@ if(isset($_POST['se_deconnecter']))
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>EXERCICE 3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <script src="main.js"></script>
 </head>
 <body>
 <form method="post" action="index.php">
   <div class="inscription">
-    <?php if(empty($_SESSION['pseudo'])): ?>
-          <input class="button" type="text" name="pseudo" placeholder="Pseudo">
-          <input class="button" type="password" name="mot_de_passe" placeholder="Mot De Passe">
+    <?php if(empty($_SESSION['login'])): ?>
+          <input class="textarea" type="text" name="login" placeholder="login">
+          <input class="textarea" type="password" name="password" placeholder="Mot De Passe">
           <input class="button" type="submit" name="se_connecter" value="Se connecter">
     <?php else : ?>
           <input class="button" type="submit" name="se_deconnecter" value="Se deconnecter">
@@ -81,7 +81,7 @@ if(isset($_POST['se_deconnecter']))
   </div>
 </form> 
   <div class="button-inscription">
-    <?php if(empty($_SESSION['pseudo'])): ?>
+    <?php if(empty($_SESSION['login'])): ?>
       <a href="ex3.php"><button>Inscription</button></a>
     <?php endif; ?>
   </div>

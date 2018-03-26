@@ -16,22 +16,22 @@ catch(Exception $e)
     die('Erreur: ' .$e->getMessage());
 }
 
-if(isset($_POST['submit']) && !empty($_POST['login']) && !empty($_POST['mot_de_passe']) && !empty($_POST['email']))
+if(isset($_POST['submit']) && !empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['email']))
 {
     $_POST['login'] = filter_var($_POST['login'],FILTER_SANITIZE_STRING);
-    $_POST['mot_de_passe'] = filter_var($_POST['mot_de_passe'],FILTER_SANITIZE_STRING);
+    $_POST['password'] = filter_var($_POST['password'],FILTER_SANITIZE_STRING);
     $_POST['email'] = filter_var($_POST['email'],FILTER_SANITIZE_STRING);
 
         $login = htmlspecialchars($_POST['login']);
-        $mot_de_passe = sha1($_POST['mot_de_passe']);
+        $password = sha1($_POST['password']);
         $email = htmlspecialchars($_POST['email']);
         global $bdd;
 
-        $emailreq = $bdd->prepare('SELECT * FROM utilisateur WHERE email = ?');
+        $emailreq = $bdd->prepare('SELECT * FROM user WHERE email = ?');
         $emailreq->execute(array($email));
         $emailexiste = $emailreq->rowcount();
 
-        $loginreq = $bdd->prepare('SELECT * FROM utilisateur WHERE login = ?');
+        $loginreq = $bdd->prepare('SELECT * FROM user WHERE login = ?');
         $loginreq->execute(array($login));
         $loginexiste = $loginreq->rowcount();
 
@@ -39,21 +39,21 @@ if(isset($_POST['submit']) && !empty($_POST['login']) && !empty($_POST['mot_de_p
         {
             if($emailexiste == 0)
             {
-                $insertutil= $bdd->prepare("INSERT INTO utilisateur (login, mot_de_passe, email) VALUES ('".$login."', '".$mot_de_passe."','".$email."')");
+                $insertutil= $bdd->prepare("INSERT INTO user (login, password, email) VALUES ('".$login."', '".$password."','".$email."')");
                 $insertutil->execute(array(
                     "login" => $login, 
-                    "mot_de_passe" => $mot_de_passe, 
+                    "password" => $password, 
                     "email" => $email));
                     header('location: index.php');
             }       
                 else 
                 {
-                    $erreur = "Votre email existe déjà!";
+                    $erreur = "Ce login/email existe déjà!";
                 }
         }
         else 
         {
-            $erreur = "Ce login est déjà utlisé!";
+            $erreur = "Ce login/email est déjà utlisé!";
         }
 }
 else 
@@ -70,7 +70,7 @@ else
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Inscription</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <script src="main.js"></script>
 </head>
 <body>
@@ -80,20 +80,20 @@ else
             <form method="post" action="ex3.php">
                 <div class="login">
                     login:
-                        <input class="button1" type="text" name="login" id="login" placeholder="login"
+                        <input class="textarea" type="text" name="login" id="login" placeholder="login"
                            value=<?php if(isset($login))
                             { 
                                echo($login); 
                             }
                             ?>></br>
                 </div>
-                <div class="mot_de_passe">
+                <div class="password">
                     Mot de passe:
-                        <input class="button2" type="password" name="mot_de_passe" id="mot_de_passe" placeholder="obligatoire"></br>
+                        <input class="textarea" type="password" name="password" id="password" placeholder="obligatoire"></br>
                 </div>
                 <div class="email">
-                    Eemail:    
-                        <input class="button3" type="text" name="email" id="email" placeholder="obligatoire"
+                    Email:    
+                        <input class="textarea" type="text" name="email" id="email" placeholder="obligatoire"
                             value=<?php if(isset($email)) 
                             {
                                 echo($email); 
@@ -102,7 +102,7 @@ else
                 </div>
             </div>    
                 <div class="envoyer"> 
-                        <input class="button4" type="submit" name="submit" value="Envoyer">
+                        <input class="button" type="submit" name="submit" value="Envoyer">
                 </div> 
             </form>
                 <?php 
