@@ -1,6 +1,7 @@
 html
 {
     text-align: center;
+    background: lightgreen;
 }
 
 form > .inscription
@@ -8,3 +9,4 @@ form > .inscription
     margin-left: 400px;
     margin-right: 400px;
 }
+

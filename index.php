@@ -38,7 +38,6 @@ if(isset($_POST['se_connecter']))
           $_SESSION['id'] = $utilinfo[0]['id'];
           $_SESSION['login'] = $utilinfo[0]['login'];
           $_SESSION['password'] = $utilinfo[0]['password'];
-          //header("Location: /php-chat-db/chatroom.php/");
     }
     else 
     {

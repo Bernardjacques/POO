@@ -23,7 +23,7 @@ if(isset($_POST['submit']) && !empty($_POST['login']) && !empty($_POST['password
     $_POST['email'] = filter_var($_POST['email'],FILTER_SANITIZE_STRING);
 
         $login = htmlspecialchars($_POST['login']);
-        $password = sha1($_POST['password']);
+        $password = password_hash($_POST['password']);
         $email = htmlspecialchars($_POST['email']);
         global $bdd;
 
